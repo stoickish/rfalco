@@ -15,11 +15,12 @@ increments. As of the latest commit:
 | `shake`   | done        | SHAKE256 sponge, zero-dep, matches round-3 API    |
 | `ntt`     | done        | Cooley-Tukey fwd + Gentleman-Sande inv, n=512,1024|
 | `codec`   | done        | pk/sig/sk bit packing per round-3 layout          |
+| `drbg`    | done        | AES-256 CTR_DRBG for NIST PQC KAT reproduction    |
+| `verify`  | done        | hash-to-point, NTT multiply, norm check           |
 | `sampler` | pending     | FP `SamplerZ` (round-3 reference, isochronous)    |
 | `fft`     | pending     | tower-of-rings FFT for signing                    |
 | `keygen`  | pending     | NTRUGen (integer, CT)                             |
 | `sign`    | pending     | hash-to-point, ffSampling, norm check             |
-| `verify`  | pending     | hash-to-point, NTT multiply, norm check           |
 | `cose`    | pending     | COSE/JOSE serialization per draft-04              |
 
 ## Design goals

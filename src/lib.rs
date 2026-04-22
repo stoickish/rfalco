@@ -5,6 +5,7 @@
 
 pub mod codec;
 pub mod cose;
+pub mod drbg;
 pub mod fft;
 pub mod field;
 pub mod keygen;
