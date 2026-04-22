@@ -19,15 +19,16 @@ Pure-Rust FN-DSA (Falcon) signature library.
 
 ## KATs
 
-- Primary: NIST PQC round-3 KAT files (`PQCgenKAT_sign.rsp`) — bit-exact keygen + verify; sign is deterministic under reference FP sampler.
+- Primary: NIST PQC round-3 KAT files (`PQCgenKAT_sign.rsp`) — **bit-exact for keygen, sign, and verify**.
 - Secondary: draft-04 Appendix A.2 COSE hex — serialization round-trip only.
-- **Sign-KAT reconciliation with CT sampler**: the constant-time integer Gaussian sampler will NOT produce bit-exact signatures matching the FP reference. Sign KATs are verified via `verify(pk, msg, kat_sig) == accept`, not byte-equality. Keygen and verify KATs remain bit-exact.
+- Bit-exact sign KATs require matching the reference op order and IEEE 754 binary64 rounding. No `fast-math`, no reassociation, no FMA contraction unless the reference uses it at that call site.
 
 ## Side-channel posture
 
-- Constant-time: all operations on secret data. Verified via integration tests (dudect-style timing + a no-secret-branch harness).
-- Gaussian sampler: CT integer variant (Karney / cumulative-table rejection). Departs from reference FP sampler; see KAT note above.
-- Masking: Boolean/arithmetic masking on secret polynomial state in sign path.
+- Constant-time: all **integer** operations on secret data are branch- and memory-access-independent. Verified via integration tests (dudect-style timing + a no-secret-branch harness).
+- Gaussian sampler: **FP reference `SamplerZ`** (`ApproxExp` + `BerExp` + rejection) per round-3 submission. Chosen to preserve bit-exact sign KATs.
+- FP timing posture: FP ops on secret data (ffSampling tree, `SamplerZ`) use isochronous sequences following the round-3 reference — same variable-free control flow, no FP compare-and-branch on secret magnitudes, no denormal-dependent paths. This matches the reference's posture; leakage via microarchitectural FP timing quirks is acknowledged and out of scope.
+- Masking: Boolean/arithmetic masking on **integer** secret polynomial state in sign path. FP state is not masked (masking FP is an open research problem).
 - Shuffling: randomized loop ordering where data-independent correctness permits.
 
 ## Formal verification

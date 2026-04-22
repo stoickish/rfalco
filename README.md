@@ -15,7 +15,7 @@ increments. As of the latest commit:
 | `shake`   | done        | SHAKE256 sponge, zero-dep, matches round-3 API    |
 | `ntt`     | done        | Cooley-Tukey fwd + Gentleman-Sande inv, n=512,1024|
 | `codec`   | done        | pk/sig/sk bit packing per round-3 layout          |
-| `sampler` | pending     | constant-time integer Gaussian (Karney)           |
+| `sampler` | pending     | FP `SamplerZ` (round-3 reference, isochronous)    |
 | `fft`     | pending     | tower-of-rings FFT for signing                    |
 | `keygen`  | pending     | NTRUGen (integer, CT)                             |
 | `sign`    | pending     | hash-to-point, ffSampling, norm check             |
@@ -27,12 +27,14 @@ increments. As of the latest commit:
 1. **Spec fidelity**: target NIST FIPS 206 (Falcon round-3 working
    reference until FIPS 206 is published). Parameter set: `q = 12289`,
    `n ∈ {512, 1024}`.
-2. **Constant-time on secrets**: every operation touching secret data is
-   branch-free in control flow and memory access. Verified via
-   integration tests (dudect-style timing + a no-secret-branch harness).
-3. **Side-channel countermeasures**: Boolean/arithmetic masking on
-   secret polynomial state in the sign path; randomized loop ordering
-   where data-independence allows.
+2. **Constant-time on secrets (integer path)**: every integer operation
+   touching secret data is branch-free in control flow and memory access.
+   FP operations on secret data (the ffSampling tree and `SamplerZ`)
+   follow the round-3 reference's isochronous sequences — same posture as
+   upstream, microarchitectural FP timing quirks acknowledged.
+3. **Side-channel countermeasures**: Boolean/arithmetic masking on the
+   integer secret polynomial state in the sign path; randomized loop
+   ordering where data-independence allows.
 4. **Formal verification**: ESBMC over all code. Per-module bounded
    verification first; whole-pipeline verification gated behind module
    proofs. Harnesses live in `tests/esbmc/`.
@@ -43,15 +45,15 @@ increments. As of the latest commit:
 Two sources of ground truth:
 
 - **Primary** — NIST PQC round-3 KAT files (`PQCgenKAT_sign.rsp`):
-  bit-exact for keygen and verify.
+  **bit-exact for keygen, sign, and verify**.
 - **Secondary** — draft-ietf-cose-falcon-04 Appendix A.2 COSE hex:
   serialization round-trip only.
 
-The constant-time integer Gaussian sampler departs from the reference
-floating-point sampler, so signatures are **not byte-identical** to the
-round-3 KATs. Sign KATs are validated as `verify(pk, msg, kat_sig) ==
-accept` rather than byte equality. Keygen and verify KATs remain
-bit-exact.
+Sign bit-exactness requires reproducing the reference's IEEE 754
+binary64 operation sequence: no `fast-math`, no reassociation, no FMA
+contraction unless the reference performs one at that call site. The
+`sampler` and `fft` modules use `f64` directly and follow the reference
+op order line-for-line.
 
 ## Build & test
 
