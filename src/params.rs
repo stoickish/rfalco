@@ -15,6 +15,12 @@ pub const N_1024: usize = 1024;
 /// FN-DSA-512 serialized signature length (draft-ietf-cose-falcon-04 Table 1).
 pub const SIG_512_BYTES: usize = 666;
 
+/// FN-DSA-1024 serialized signature length.
+pub const SIG_1024_BYTES: usize = 1280;
+
+/// Fixed nonce / salt length in bytes (Falcon round-3 §3.8).
+pub const NONCE_BYTES: usize = 40;
+
 /// FN-DSA-512 serialized public-key length.
 pub const PUB_512_BYTES: usize = 897;
 
