@@ -115,7 +115,18 @@ mod tests {
     #[test]
     fn reduce_full_range_sample() {
         let qsq = (Q - 1) * (Q - 1);
-        for x in [0u32, 1, Q - 1, Q, Q + 1, 2 * Q, qsq, 1_000_000, 50_000_000, 150_000_000] {
+        for x in [
+            0u32,
+            1,
+            Q - 1,
+            Q,
+            Q + 1,
+            2 * Q,
+            qsq,
+            1_000_000,
+            50_000_000,
+            150_000_000,
+        ] {
             assert_eq!(reduce(x), reduce_ref(x), "reduce({x})");
         }
     }
