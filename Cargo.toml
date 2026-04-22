@@ -1,0 +1,38 @@
+[package]
+name = "rfalco"
+version = "0.0.1"
+edition = "2021"
+rust-version = "1.75"
+description = "Pure-Rust FN-DSA (Falcon) digital signature — constant-time, ESBMC-verifiable"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[lib]
+name = "rfalco"
+path = "src/lib.rs"
+
+[lints.rust]
+warnings         = "deny"
+missing_docs     = "warn"
+unsafe_code      = "forbid"
+unreachable_pub  = "warn"
+rust_2018_idioms = { level = "warn", priority = -1 }
+
+[lints.clippy]
+all           = { level = "deny",  priority = -1 }
+pedantic      = { level = "deny",  priority = -1 }
+nursery       = { level = "warn",  priority = -1 }
+cargo         = { level = "warn",  priority = -1 }
+module_name_repetitions = "allow"
+exhaustive_enums        = "allow"
+
+[profile.release]
+opt-level        = 3
+lto              = "fat"
+codegen-units    = 1
+overflow-checks  = true
+debug-assertions = false
+
+[profile.test]
+opt-level       = 1
+overflow-checks = true

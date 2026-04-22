@@ -1,0 +1,30 @@
+# Cargo build artifacts
+/target
+
+# macOS
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Profiling / coverage outputs
+*.profraw
+*.profdata
+/coverage/
+/flamegraph.svg
+
+# ESBMC scratch (to be populated later)
+/tests/esbmc/build/
+
+# Rust backtrace dumps
+core
+core.*
