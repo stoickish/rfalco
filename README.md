@@ -18,7 +18,7 @@ increments. As of the latest commit:
 | `drbg`    | done        | AES-256 CTR_DRBG for NIST PQC KAT reproduction    |
 | `verify`  | done        | hash-to-point, NTT multiply, norm check           |
 | `sampler` | pending     | FP `SamplerZ` (round-3 reference, isochronous)    |
-| `fft`     | pending     | tower-of-rings FFT for signing                    |
+| `fft`     | done        | tower-of-rings FFT, `f64` bit-exact vs round-3    |
 | `keygen`  | pending     | NTRUGen (integer, CT)                             |
 | `sign`    | pending     | hash-to-point, ffSampling, norm check             |
 | `cose`    | pending     | COSE/JOSE serialization per draft-04              |
