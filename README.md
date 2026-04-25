@@ -17,7 +17,7 @@ increments. As of the latest commit:
 | `codec`   | done        | pk/sig/sk bit packing per round-3 layout          |
 | `drbg`    | done        | AES-256 CTR_DRBG for NIST PQC KAT reproduction    |
 | `verify`  | done        | hash-to-point, NTT multiply, norm check           |
-| `sampler` | pending     | FP `SamplerZ` (round-3 reference, isochronous)    |
+| `sampler` | done        | FP `SamplerZ`, bit-exact vs PQClean reference     |
 | `fft`     | done        | tower-of-rings FFT, `f64` bit-exact vs round-3    |
 | `keygen`  | pending     | NTRUGen (integer, CT)                             |
 | `sign`    | pending     | hash-to-point, ffSampling, norm check             |
@@ -79,7 +79,7 @@ src/
   shake.rs     SHAKE256
   ntt/         negacyclic NTT + twiddle tables
   fft.rs       tower-of-rings FFT (pending)
-  sampler.rs   integer Gaussian (pending)
+  sampler.rs   FP discrete Gaussian (done, bit-exact)
   keygen.rs    NTRUGen (pending)
   sign.rs      signing (pending)
   verify.rs    verification (pending)
